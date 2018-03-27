@@ -14,23 +14,21 @@ import java.util.Stack;
 public class Lexico {
 
     Stack<Token> tk;
+    MapaTokens mapaTok = new MapaTokens();
 
     public Lexico() {
         tk = new Stack<>();
     }
 
-    MapaTokens mapaTok = new MapaTokens();
-
-    public Stack<Token> analiseLexica(Stack<Character> pilha) {
+    public Stack<Token> analiseLexica(Stack<Character> pilha) throws ErroLexico {
         String palavra = "";
-        
-
         while (!pilha.isEmpty()) {
-         
             Character caractere = pilha.pop();
+            if (Character.isWhitespace(caractere)) {
+                continue;
+            }
 //          analisar letras/digitos
             if (Character.isLetter(caractere) || caractere == '_') {
-
                 pilha = verificaPalavras(pilha, caractere);
 //              analisar digitos
             } else if (Character.isDigit(caractere)) {
@@ -39,92 +37,46 @@ public class Lexico {
                 tk.push(mapaTok.getToken(Character.toString(caractere)));
             } //analisar atribuicao
             else if (caractere == ':') {
-
-                pilha = verificaAtribuicao(pilha, caractere);
-
+                verificaAtribuicao(pilha, caractere);
             } else if (operadoresRelacionais(caractere)) {
-
-                pilha = verificaRelacionais(pilha, caractere);
-                /*while (!pilha.empty()) {
-                    palavra += caractere.toString();
-                    if (caractere == '>') {
-                        caractere = pilha.isEmpty() ? ' ' : pilha.pop();
-                        if (caractere == '=') {
-                            palavra += caractere.toString();
-                            tk.add(mapaTok.getToken(palavra));
-                            palavra = "";
-                            break;
-                        } else {
-                            pilha.push(caractere);
-                        }
-                        tk.add(mapaTok.getToken(palavra));
-                        palavra = "";
-                        break;
-                    }
-                    if (caractere == '<') {
-                        caractere = pilha.isEmpty() ? ' ' : pilha.pop();
-                        if (caractere == '>') {
-                            palavra += caractere.toString();
-                            tk.add(mapaTok.getToken(palavra));
-                            palavra = "";
-                            break;
-
-                        } else if (caractere == '=') {
-                            palavra += caractere.toString();
-                            tk.add(mapaTok.getToken(palavra));
-                            palavra = "";
-                            break;
-                        } else {
-                            pilha.push(caractere);
-
-                        }
-                        tk.add(mapaTok.getToken(palavra));
-                        palavra = "";
-                        break;
-                    }
-
-                }*/
-                 
-            }
-
-            if (caractere == '\'') {
-                while (!pilha.empty()) {
-                    caractere = pilha.pop();
-                    if (caractere != '\'') {
-                        palavra += caractere;
-
-                    }
-
-                }
-
+                verificaRelacionais(pilha, caractere);
+            } else if (caractere == '\'') {
+                verificaLiteral(pilha, caractere);
             }
 
         }
-
         return tk;
     }
 
-    public boolean operadoresMatematicos(char caractere) {
+    public boolean operadoresMatematicos(Character caractere) {
         //if(caractere=='+'||caractere=='-'||caractere=='*'||caractere=='/')
         return caractere == '+' || caractere == '-' || caractere == '*' || caractere == '/';
 
         //return caractere;
     }
 
-    public boolean operadoresRelacionais(char caractere) {
+    public boolean operadoresRelacionais(Character caractere) {
         return caractere == '>' || caractere == '<' || caractere == '=';
     }
+    
+    public boolean simbolos(Character caractere){
+        return caractere == '.' || caractere == ',' || caractere == ';';
+    }
 
-    public Stack<Character> verificaPalavras(Stack<Character> pilha, Character caractere) {
+    public Stack<Character> verificaPalavras(Stack<Character> pilha, Character caractere) throws ErroLexico {
 
         String palavra = caractere.toString();
         while (!pilha.empty()) {
 
             caractere = pilha.pop();
-            //palavra+= caractere;
+            if (palavra.length() > 30) {
+                throw new ErroLexico("ERRO LEXICO: " + palavra);
+            }
+
             if (Character.isLetterOrDigit(caractere) || caractere.equals('_')) {
                 palavra += caractere;
             } else {
+                pilha.push(caractere);
                 break;
             }
         }
@@ -133,16 +85,21 @@ public class Lexico {
         return pilha;
     }
 
-    public Stack<Character> verificaInteiros(Stack<Character> pilha, Character caractere) {
+    public Stack<Character> verificaInteiros(Stack<Character> pilha, Character caractere) throws ErroLexico {
         String palavra = caractere.toString();
         while (!pilha.empty()) {
             caractere = pilha.pop();
-            //palavra += caractere;
+
+            if (Integer.parseInt(palavra) > 32767) {
+                throw new ErroLexico("");
+
+            }
+
             if (Character.isLetter(caractere)) { //tem que adicionar exception
-                System.out.println("deu merda");
+
                 break;
             } else if (!Character.isDigit(caractere)) {
-
+                pilha.push(caractere);
                 break;
 
             } else {
@@ -155,81 +112,97 @@ public class Lexico {
         return pilha;
     }
 
-    public Stack<Character> verificaAtribuicao(Stack<Character> pilha, Character caractere) {
+    public void verificaAtribuicao(Stack<Character> pilha, Character caractere) {
         String palavra = caractere.toString();
 
-        while (!pilha.empty()) {
-            caractere = pilha.pop();
-            if (caractere == '=') {
-                palavra += caractere;
-                tk.add(mapaTok.getToken(palavra));
-
-                break;
-
-            } else if (Character.isWhitespace(caractere)) {
-
-                continue;
-            } else {
-                pilha.push(caractere);
-            }
+        if (pilha.empty()) {
             tk.add(mapaTok.getToken(palavra));
-
-            break;
-
+            return;
         }
-        if(pilha.empty()){
+        caractere = pilha.pop();
+        if (caractere == '=') {
+            palavra += caractere;
             tk.add(mapaTok.getToken(palavra));
+            return;
         }
-        
-        return pilha;
+        pilha.push(caractere);
+        tk.add(mapaTok.getToken(palavra));
     }
 
-    public Stack<Character> verificaRelacionais(Stack<Character> pilha, Character caractere) {
+    public void verificaRelacionais(Stack<Character> pilha, Character caractere) {
         String palavra = caractere.toString();
         // ache o erro dessa PORRA
+        //caractere = pilha.pop();
+
+        if (pilha.empty()) {
+            tk.add(mapaTok.getToken(palavra));
+            return;
+        }
+        if (caractere == '>') {
+
+            caractere = pilha.pop();
+
+            if (caractere == '=') {
+                palavra += caractere.toString();
+                tk.add(mapaTok.getToken(palavra));
+                // palavra = "";
+
+            } else {
+                pilha.push(caractere);
+                tk.add(mapaTok.getToken(palavra));
+
+            }
+
+        } else if (caractere == '<') {
+            caractere = pilha.pop();
+            if (null == caractere) {
+                pilha.push(caractere);
+
+            } else {
+                switch (caractere) {
+                    case '>':
+                        palavra += caractere.toString();
+                        tk.add(mapaTok.getToken(palavra));
+                        break;
+                    case '=':
+                        palavra += caractere.toString();
+                        tk.add(mapaTok.getToken(palavra));
+                        break;
+                    default:
+                        pilha.push(caractere);
+                        break;
+                }
+            }
+
+        }
+    }
+
+    public void verificaComentario(Stack<Character> pilha, Character caractere) {
+
+    }
+
+    public void verificaLiteral(Stack<Character> pilha, Character caractere) throws ErroLexico {
+        String palavra = "";
+
         while (!pilha.empty()) {
             caractere = pilha.pop();
-            if (caractere == '>') {
-                caractere =  pilha.pop();
-                if (caractere == '=') {
-                    palavra += caractere.toString();
-                    tk.add(mapaTok.getToken(palavra));
-                    palavra = "";
-                    break;
-                } else {
-                    pilha.push(caractere);
-                }
-                tk.add(mapaTok.getToken(palavra));
-                palavra = "";
-                break;
-            }
-            if (caractere == '<') {
-                caractere = pilha.pop();
-                if (caractere == '>') {
-                    palavra += caractere.toString();
-                    tk.add(mapaTok.getToken(palavra));
-                    palavra = "";
-                    break;
-
-                } else if (caractere == '=') {
-                    palavra += caractere.toString();
-                    tk.add(mapaTok.getToken(palavra));
-                    palavra = "";
-                    break;
-                } else {
-                    pilha.push(caractere);
+            if (caractere == '\'') {
+                if (palavra.length() > 255) {
+                    throw new ErroLexico("erro");
 
                 }
-                tk.add(mapaTok.getToken(palavra));
-                palavra = "";
-                break;
+
+                tk.add(new Token(mapaTok.getCodigo("Literal"), palavra));
+                return;
+            } else {
+                palavra += caractere.toString();
             }
 
         }
-        if(pilha.empty()){
-            tk.add(mapaTok.getToken(palavra));
+        if(pilha.empty() && caractere!= '\''){
+            throw new ErroLexico("Literal nao fechado");
         }
-       
-        return pilha;
+
     }
+
 }

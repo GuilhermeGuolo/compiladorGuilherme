@@ -81,4 +81,8 @@ public class MapaTokens {
             return new Token(tokens.get("Identificador"), palavra);
         }
     }
+    
+    public int getCodigo(String token){
+        return tokens.get(token);
+    }
 }

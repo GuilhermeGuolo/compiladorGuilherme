@@ -6,6 +6,8 @@
 package compiladorguilherme;
 
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,20 +20,24 @@ public class Compilador {
      */
     public static void main(String[] args) {
 
-        String texto = ">= <>";
+        String texto = "'ta aqui o literal";
         //String palavra = "";
         Stack<Character> pilha = new Stack<>();
         Stack<Token> pilhaToken = new Stack<>();
 
-        pilhaToken = new Lexico().analiseLexica(MontaPilha(texto));
+        try {
+            pilhaToken = new Lexico().analiseLexica(MontaPilha(texto));
+        } catch (ErroLexico ex) {
+            System.out.println(ex.getMessage());
+        }
         pilha = MontaPilha(texto);
         while (!pilhaToken.isEmpty()) {
             System.out.println(pilhaToken.pop());
         }
         
-        /*while (!pilha.isEmpty()) {
+        while (!pilha.isEmpty()) {
             System.out.println(pilha.pop());
-        }*/
+        }
         
 
     }
