@@ -42,6 +42,9 @@ public class Lexico {
                 verificaRelacionais(pilha, caractere);
             } else if (caractere == '\'') {
                 verificaLiteral(pilha, caractere);
+            } else if (Simbolos(caractere)) {
+                verificaSimbolos(pilha, caractere);
+
             }
 
         }
@@ -58,9 +61,11 @@ public class Lexico {
     public boolean operadoresRelacionais(Character caractere) {
         return caractere == '>' || caractere == '<' || caractere == '=';
     }
-    
-    public boolean simbolos(Character caractere){
-        return caractere == '.' || caractere == ',' || caractere == ';';
+
+    public boolean Simbolos(Character caractere) {
+        return caractere == '.' || caractere == ',' || caractere == ';' || caractere == '$'
+                || caractere == '[' || caractere == ']' || caractere == '('
+                || caractere == ')';
     }
 
     public Stack<Character> verificaPalavras(Stack<Character> pilha, Character caractere) throws ErroLexico {
@@ -131,8 +136,6 @@ public class Lexico {
 
     public void verificaRelacionais(Stack<Character> pilha, Character caractere) {
         String palavra = caractere.toString();
-        // ache o erro dessa PORRA
-        //caractere = pilha.pop();
 
         if (pilha.empty()) {
             tk.add(mapaTok.getToken(palavra));
@@ -179,7 +182,7 @@ public class Lexico {
 
     public void verificaComentario(Stack<Character> pilha, Character caractere) {
 
-    }
+    } //nao feito ainda
 
     public void verificaLiteral(Stack<Character> pilha, Character caractere) throws ErroLexico {
         String palavra = "";
@@ -199,10 +202,80 @@ public class Lexico {
             }
 
         }
-        if(pilha.empty() && caractere!= '\''){
+        if (pilha.empty() && caractere != '\'') {
             throw new ErroLexico("Literal nao fechado");
         }
 
+    }
+
+    public void verificaSimbolos(Stack<Character> pilha, Character caractere) {
+        String palavra = caractere.toString();
+
+        if (caractere == '.' || caractere == '(') {
+            if (pilha.empty()) {
+                tk.add(mapaTok.getToken(palavra));
+                return;
+            }
+            if (caractere == '.') {
+
+                caractere = pilha.pop();
+
+                if (caractere == '.') {
+                    palavra += caractere.toString();
+                    tk.add(mapaTok.getToken(palavra));
+
+                } else {
+                    pilha.push(caractere);
+                    tk.add(mapaTok.getToken(palavra));
+
+                }
+
+            } else if (caractere == '(') {
+                if (!pilha.empty()) {
+                    caractere = pilha.pop();
+                    if (caractere == '*') {
+                        verificaComentario(pilha, caractere);
+                    }
+                } else {
+                    tk.add(mapaTok.getToken(palavra));
+                    return;
+                }
+            }
+        } else {
+            tk.add(mapaTok.getToken(palavra));
+            return;
+        }
+
+        /*if (pilha.empty()) {
+            tk.add(mapaTok.getToken(palavra));
+            return;
+        }
+
+        if (caractere == '.') {
+
+            caractere = pilha.pop();
+
+            if (caractere == '.') {
+                palavra += caractere.toString();
+                tk.add(mapaTok.getToken(palavra));
+
+            } else {
+                pilha.push(caractere);
+                tk.add(mapaTok.getToken(palavra));
+
+            }
+
+        } else if (caractere == '(') {
+            if (!pilha.empty()) {
+                caractere = pilha.pop();
+                if (caractere == '*') {
+                    verificaComentario(pilha, caractere);
+                }
+            } else {
+                tk.add(mapaTok.getToken(palavra));
+                return;
+            }
+        }*/
     }
 
 }

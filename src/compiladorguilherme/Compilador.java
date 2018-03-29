@@ -20,7 +20,7 @@ public class Compilador {
      */
     public static void main(String[] args) {
 
-        String texto = "'ta aqui o literal";
+        String texto = "(*";
         //String palavra = "";
         Stack<Character> pilha = new Stack<>();
         Stack<Token> pilhaToken = new Stack<>();
