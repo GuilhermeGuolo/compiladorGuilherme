@@ -21,7 +21,7 @@ public class Compilador {
      */
     public static void main(String[] args) {
 
-        String texto = "(*hhhh*) Program Guilherme; Procedure minharola2; 'literal da puta que pariu'";
+        String texto = "Program Guilherme * $ . .. := : (*abc*)For(Integer i=50);";
         //String palavra = "";
         Stack<Character> pilha;
         Stack<Token> pilhaToken = new Stack<>();
@@ -33,12 +33,18 @@ public class Compilador {
         }
         pilha = MontaPilha(texto);
         
-        
-        
-     
-        while (!pilhaToken.isEmpty()) {
-            System.out.println(pilhaToken.pop());
+        Stack<Token> pilhaimprime = new Stack<>();
+        for(int i =pilhaToken.size()-1;i>=0;i--){
+            pilhaimprime.push(pilhaToken.elementAt(i));
         }
+       // essa arte faz tal coisa
+         while (!pilhaimprime.isEmpty()) {
+            System.out.println(pilhaimprime.pop());
+        }
+     
+        /*while (!pilhaToken.isEmpty()) {
+            System.out.println(pilhaToken.pop());
+        }*/
         
     
        
