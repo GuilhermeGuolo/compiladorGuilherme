@@ -21,7 +21,8 @@ public class Compilador {
      */
     public static void main(String[] args) {
 
-        String texto = "Program Guilherme * $ . .. := : (*abc*)For(Integer i=50);";
+        String texto = "1 1 1 1";
+
         //String palavra = "";
         Stack<Character> pilha;
         Stack<Token> pilhaToken = new Stack<>();
@@ -31,37 +32,31 @@ public class Compilador {
         } catch (ErroLexico ex) {
             System.out.println(ex.getMessage());
         }
-        pilha = MontaPilha(texto);
-        
+        //pilha = MontaPilha(texto);
+
         Stack<Token> pilhaimprime = new Stack<>();
-        for(int i =pilhaToken.size()-1;i>=0;i--){
+        for (int i = pilhaToken.size() - 1; i >= 0; i--) {
             pilhaimprime.push(pilhaToken.elementAt(i));
         }
-       // essa arte faz tal coisa
-         while (!pilhaimprime.isEmpty()) {
+
+        while (!pilhaimprime.isEmpty()) {
             System.out.println(pilhaimprime.pop());
+
         }
-     
-        /*while (!pilhaToken.isEmpty()) {
-            System.out.println(pilhaToken.pop());
-        }*/
-        
-    
-       
-        
 
     }
 
     public static Stack<Character> MontaPilha(String texto) {
         Stack<Character> pilha = new Stack<>();
         for (int i = texto.length() - 1; i >= 0; i--) {
+            if (texto.charAt(i) == '\n') {
+
+            }
             pilha.push(texto.charAt(i));
-         
+
         }
 
         return pilha;
     }
-    
-
 
 }
