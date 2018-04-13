@@ -5,6 +5,8 @@
  */
 package compiladorguilherme;
 
+import compilador.Estruturas.Token;
+import compilador.View.Editor;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -15,13 +17,14 @@ import java.util.logging.Logger;
  * @author Guilherme
  */
 public class Compilador {
+    Editor editor = new Editor();
+    
 
     /**
-     * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static Stack<Token> rodarLexico(String texto) {
 
-        String texto = "1 1 1 1";
+        //String texto = "1 1 1 1";
 
         //String palavra = "";
         Stack<Character> pilha;
@@ -38,11 +41,14 @@ public class Compilador {
         for (int i = pilhaToken.size() - 1; i >= 0; i--) {
             pilhaimprime.push(pilhaToken.elementAt(i));
         }
+        
+        
 
         while (!pilhaimprime.isEmpty()) {
             System.out.println(pilhaimprime.pop());
 
         }
+        return pilhaToken;
 
     }
 

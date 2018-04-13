@@ -1,0 +1,4 @@
+Program teste123;
+	Procedure teste;
+Integer numero=3;
+End.

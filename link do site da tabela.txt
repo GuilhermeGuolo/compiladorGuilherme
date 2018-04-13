@@ -1,0 +1,1 @@
+http://www.botecodigital.info/java/criando-um-model-para-um-jtable-com-abstracttablemodel/

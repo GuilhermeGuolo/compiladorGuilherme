@@ -5,6 +5,8 @@
  */
 package compiladorguilherme;
 
+import compilador.Estruturas.Token;
+import compilador.Estruturas.MapaTokens;
 import java.util.Stack;
 
 /**
@@ -15,18 +17,26 @@ public class Lexico {
 
     Stack<Token> tk;
     MapaTokens mapaTok = new MapaTokens();
+    
 
     public Lexico() {
         tk = new Stack<>();
     }
+    int linha = 1;
+   
 
     public Stack<Token> analiseLexica(Stack<Character> pilha) throws ErroLexico {
-        String palavra = "";
+
         while (!pilha.isEmpty()) {
             Character caractere = pilha.pop();
+
             if (Character.isWhitespace(caractere)) {
+                if (caractere == '\n') {
+                    linha++;
+                }
                 continue;
             }
+
 //          analisar letras/digitos
             if (Character.isLetter(caractere) || caractere == '_') {
                 pilha = verificaPalavras(pilha, caractere);
@@ -48,6 +58,8 @@ public class Lexico {
             }
 
         }
+        
+        //System.out.println("Linha: "+linha);
         return tk;
     }
 
@@ -75,9 +87,10 @@ public class Lexico {
 
             caractere = pilha.pop();
             if (palavra.length() > 30) {
-                throw new ErroLexico("ERRO LEXICO: " + palavra);
+                
+                throw new ErroLexico("ERRO LEXICO: " + palavra,linha);
             }
-
+            
             if (Character.isLetterOrDigit(caractere) || caractere.equals('_')) {
                 palavra += caractere;
             } else {
@@ -94,21 +107,21 @@ public class Lexico {
         String palavra = caractere.toString();
         while (!pilha.empty()) {
             caractere = pilha.pop();
-
-            if (Integer.parseInt(palavra) > 32767) {
-                throw new ErroLexico("");
-
-            }
+            //palavra += caractere.toString();
 
             if (Character.isLetter(caractere)) { //tem que adicionar exception
+                throw new ErroLexico("Numero invalido!",linha);
 
-                break;
             } else if (!Character.isDigit(caractere)) {
                 pilha.push(caractere);
                 break;
 
             } else {
                 palavra += caractere;
+                if (Integer.parseInt(palavra) > 32767) {
+                    throw new ErroLexico("Numero nao suportado!",linha);
+
+                }
 
             }
         }
@@ -177,11 +190,37 @@ public class Lexico {
                 }
             }
 
+        } else if (caractere == '=') {
+
+            tk.add(mapaTok.getToken(palavra));
         }
     }
 
-    public void verificaComentario(Stack<Character> pilha, Character caractere) {
+    public void verificaComentario(Stack<Character> pilha, Character caractere) throws ErroLexico {
+        // try {
 
+        while (!pilha.empty()) {
+            // caractere = pilha.pop();
+            if (caractere == '*') {
+                caractere = pilha.pop();
+                if (caractere == ')') {
+                    return;
+                }
+            } else {
+                if (!pilha.empty()) {
+                    caractere = pilha.pop();
+                }
+
+                if (pilha.empty()) {
+                    throw new ErroLexico("Comentario infinito!",linha);
+                }
+            }
+
+        }
+
+        /* } catch (Exception e) {
+            throw new ErroLexico("Comentario infinito!");
+        }*/
     } //nao feito ainda
 
     public void verificaLiteral(Stack<Character> pilha, Character caractere) throws ErroLexico {
@@ -191,7 +230,7 @@ public class Lexico {
             caractere = pilha.pop();
             if (caractere == '\'') {
                 if (palavra.length() > 255) {
-                    throw new ErroLexico("erro");
+                    throw new ErroLexico("erro",linha);
 
                 }
 
@@ -203,12 +242,12 @@ public class Lexico {
 
         }
         if (pilha.empty() && caractere != '\'') {
-            throw new ErroLexico("Literal nao fechado");
+            throw new ErroLexico("Literal nao fechado",linha);
         }
 
     }
 
-    public void verificaSimbolos(Stack<Character> pilha, Character caractere) {
+    public void verificaSimbolos(Stack<Character> pilha, Character caractere) throws ErroLexico {
         String palavra = caractere.toString();
 
         if (caractere == '.' || caractere == '(') {
@@ -231,10 +270,17 @@ public class Lexico {
                 }
 
             } else if (caractere == '(') {
+                //palavra+= caractere.toString();
                 if (!pilha.empty()) {
                     caractere = pilha.pop();
+
                     if (caractere == '*') {
                         verificaComentario(pilha, caractere);
+                    } else {
+                        pilha.push(caractere);
+                        tk.add(mapaTok.getToken(palavra));
+                        return;
+
                     }
                 } else {
                     tk.add(mapaTok.getToken(palavra));
@@ -246,36 +292,6 @@ public class Lexico {
             return;
         }
 
-        /*if (pilha.empty()) {
-            tk.add(mapaTok.getToken(palavra));
-            return;
-        }
-
-        if (caractere == '.') {
-
-            caractere = pilha.pop();
-
-            if (caractere == '.') {
-                palavra += caractere.toString();
-                tk.add(mapaTok.getToken(palavra));
-
-            } else {
-                pilha.push(caractere);
-                tk.add(mapaTok.getToken(palavra));
-
-            }
-
-        } else if (caractere == '(') {
-            if (!pilha.empty()) {
-                caractere = pilha.pop();
-                if (caractere == '*') {
-                    verificaComentario(pilha, caractere);
-                }
-            } else {
-                tk.add(mapaTok.getToken(palavra));
-                return;
-            }
-        }*/
     }
 
 }
