@@ -5,9 +5,11 @@
  */
 package compilador.Controle;
 
+import Erros.ErroSintatico;
 import compilador.Estruturas.Token;
 import compiladorguilherme.Compilador;
 import compilador.View.Editor;
+import compiladorguilherme.Sintatico;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -17,6 +19,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Stack;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -38,16 +42,21 @@ public class ControleEditor implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            verificarComando(e);
-        } catch (IOException ex) {
+            
+                verificarComando(e);
+        }
+         catch (IOException ex) {
             JOptionPane.showMessageDialog(editor, ex.getMessage());
+        } catch (ErroSintatico ex) {
+            
         }
     }
 
-    public void verificarComando(ActionEvent ae) throws IOException {
+    public void verificarComando(ActionEvent ae) throws IOException, ErroSintatico {
         switch (ae.getActionCommand()) {
             case "Abrir":
                 abrir();
+
                 break;
             case "Salvar":
                 salvarArquivo();
@@ -57,13 +66,22 @@ public class ControleEditor implements ActionListener {
                 break;
             case "Compila":
                 Stack<Token> pilha = Compilador.rodarLexico(editor.getTexto());
-                editor.limpaTabela();//nao funciona
                 editor.addTabela(pilha);
+                pilha = invertePilha(pilha);
+                new Sintatico(pilha).AnaliseSintatica();
 
                 break;
 
         }
 
+    }
+
+    public Stack<Token> invertePilha(Stack<Token> pilha) {
+        Stack<Token> pilhaInvertida = new Stack<>();
+        while (!pilha.empty()) {
+            pilhaInvertida.push(pilha.pop());
+        }
+        return pilhaInvertida;
     }
 
     private void sair() {

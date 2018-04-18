@@ -5,6 +5,7 @@
  */
 package compiladorguilherme;
 
+import Erros.ErroLexico;
 import compilador.Estruturas.Token;
 import compilador.Estruturas.MapaTokens;
 import java.util.Stack;

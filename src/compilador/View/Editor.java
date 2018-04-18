@@ -8,7 +8,6 @@ package compilador.View;
 import compilador.Controle.ControleEditor;
 import compilador.Controle.ModeloTabelaToken;
 import compilador.Estruturas.Token;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Stack;
+import javax.swing.UIManager;
 
 /**
  *
@@ -28,19 +28,28 @@ public class Editor extends javax.swing.JFrame {
     public Editor() {
         initComponents();
         tabela.setModel(modelotabela);
+        this.setLocationRelativeTo(null);
+
     }
 
     public void addTabela(Stack<Token> pilha) {
+        limpaTabela();
         for (int i = 0; i < pilha.size(); i++) {
             modelotabela.addRow(pilha.elementAt(i));
+
         }
 
     }
 
-
     public void limpaTabela() {
+        int tam = modelotabela.getRowCount();
+        for (int i = 0; i <tam; i++) {
+            modelotabela.removeRow(i);
+        }
         
     }
+
+  
 
     ActionListener listener = new ControleEditor(this);
 
@@ -75,6 +84,7 @@ public class Editor extends javax.swing.JFrame {
         area_editor.setColumns(20);
         area_editor.setLineWrap(true);
         area_editor.setRows(5);
+        area_editor.setText("Program testeproc1; \nVar \n    X, y, z :integer; \nProcedure P; ");
         jScrollPane1.setViewportView(area_editor);
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(
@@ -95,13 +105,13 @@ public class Editor extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
         );
 
@@ -200,21 +210,18 @@ public class Editor extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            /* for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Editor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Editor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Editor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            }*/
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Editor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
         //</editor-fold>
 
         /* Create and display the form */

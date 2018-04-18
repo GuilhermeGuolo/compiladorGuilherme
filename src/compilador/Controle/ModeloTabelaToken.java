@@ -40,6 +40,7 @@ public class ModeloTabelaToken extends AbstractTableModel {
         this.fireTableRowsDeleted(linha,linha);
     }
 
+    
     @Override
     public int getRowCount() {
         return pilha.size();

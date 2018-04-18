@@ -5,6 +5,7 @@
  */
 package compiladorguilherme;
 
+import Erros.ErroLexico;
 import compilador.Estruturas.Token;
 import compilador.View.Editor;
 import java.util.Iterator;

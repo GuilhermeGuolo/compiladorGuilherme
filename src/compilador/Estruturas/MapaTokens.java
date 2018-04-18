@@ -85,4 +85,8 @@ public class MapaTokens {
     public int getCodigo(String token){
         return tokens.get(token);
     }
+    
+    public boolean existeToken(String palavra){
+        return tokens.containsKey(palavra);
+    }
 }
