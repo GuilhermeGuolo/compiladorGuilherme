@@ -66,7 +66,7 @@ public class ControleEditor implements ActionListener {
                 break;
             case "Compila":
                 Stack<Token> pilha = Compilador.rodarLexico(editor.getTexto());
-                //editor.addTabela(pilha);
+                editor.addTabela(pilha);
                 pilha = invertePilha(pilha);
                 new Sintatico(pilha).AnaliseSintatica();
 
