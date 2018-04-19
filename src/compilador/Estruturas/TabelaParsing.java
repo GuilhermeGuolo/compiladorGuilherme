@@ -63,7 +63,7 @@ public class TabelaParsing {
         tabelaparsing[66][13] = "If|EXPRESSAO|Then|COMANDO|ELSEPARTE";
         tabelaparsing[66][15] = "NULL";
         tabelaparsing[66][16] = "While|EXPRESSAO|Do|COMANDO";
-        tabelaparsing[66][18] = "REPEAT|COMANDO|Until|EXPRESSAO";
+        tabelaparsing[66][18] = "Repeat|COMANDO|Until|EXPRESSAO";
         tabelaparsing[66][19] = "NULL";
         tabelaparsing[66][20] = "Readln|(|VARIAVEL|REPVARIAVEL|)";
         tabelaparsing[66][21] = "Writeln|(|ITEMSAIDA|REPITEM|)";
@@ -84,7 +84,7 @@ public class TabelaParsing {
         tabelaparsing[70][37] = "NULL";
         tabelaparsing[70][46] = ",|EXPRESSAO|REPPAR";
         tabelaparsing[71][7] = "NULL";
-        tabelaparsing[71][15] = "ELSE|COMANDO";
+        tabelaparsing[71][15] = "Else|COMANDO";
         tabelaparsing[71][19] = "NULL";
         tabelaparsing[71][47] = "NULL";
         tabelaparsing[72][25] = "Identificador|VARIAVEL1";
@@ -120,7 +120,7 @@ public class TabelaParsing {
         tabelaparsing[75][30] = "EXPRESSAO";
         tabelaparsing[75][31] = "EXPRESSAO";
         tabelaparsing[75][36] = "EXPRESSAO";
-        tabelaparsing[75][48] = "LITERAL";
+        tabelaparsing[75][48] = "Literal";
         tabelaparsing[76][37] = "NULL";
         tabelaparsing[76][46] = ",|ITEMSAIDA|REPITEM";
         tabelaparsing[77][24] = "EXPSIMP|REPEXPSIMP";

@@ -84,7 +84,7 @@ public class Editor extends javax.swing.JFrame {
         area_editor.setColumns(20);
         area_editor.setLineWrap(true);
         area_editor.setRows(5);
-        area_editor.setText("Program testeproc1; \nVar \n    X, y, z :integer; \nProcedure P; ");
+        area_editor.setText("Program testeproc1; \nVar \n    X, y, z :Integer; \nProcedure P; \nBegin\n\n\nEnd.");
         jScrollPane1.setViewportView(area_editor);
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(

@@ -70,15 +70,15 @@ public class MapaTokens {
         tokens.put("$", 51);
     }
 
-    public  Token getToken(String palavra) {
+    public  Token getToken(String palavra,int linha) {
         if (tokens.containsKey(palavra)) {
-            return new Token(tokens.get(palavra), palavra);
+            return new Token(tokens.get(palavra), palavra,linha);
         } 
         else if(Character.isDigit(palavra.charAt(0))){
-            return new Token(tokens.get("Inteiro"), palavra);
+            return new Token(tokens.get("Inteiro"), palavra,linha);
         }
         else {
-            return new Token(tokens.get("Identificador"), palavra);
+            return new Token(tokens.get("Identificador"), palavra,linha);
         }
     }
     

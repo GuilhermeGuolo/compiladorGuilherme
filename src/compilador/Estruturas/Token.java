@@ -12,10 +12,12 @@ package compilador.Estruturas;
 public class Token {
     private final int codigo;
     private final String palavra;
+    private final int linha;
 
-    public Token(int codigo, String palavra) {
+    public Token(int codigo, String palavra,int linha) {
         this.codigo = codigo;
         this.palavra = palavra;
+        this.linha = linha;
     }
 
     public int getCodigo() {
@@ -24,6 +26,10 @@ public class Token {
 
     public String getPalavra() {
         return palavra;
+    }
+    
+    public int getLinha(){
+        return linha;
     }
 
     @Override

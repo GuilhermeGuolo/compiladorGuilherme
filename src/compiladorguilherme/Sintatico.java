@@ -50,24 +50,21 @@ public class Sintatico {
                     x.pop();
                     a.pop();
                 } else {
-                    throw new ErroSintatico("");
+                    throw new ErroSintatico("Erro sintatico: "+token.getPalavra()+token.getLinha());
                     
                     
                 }
 
             } else {
                 String derivado = tabelaparsing.getDerivacao(simbolo, token);
-                
-                if (derivado == "NULL") { 
-                   x.pop();
+                if ("NULL".equals(derivado)) { 
+                    x.pop();
                 }
                 else if(derivado == null){
-                    throw new ErroSintatico("Derivação nula!");
+                    throw new ErroSintatico("Derivação nula!"+token.getPalavra()+token.getLinha());
                 }
-                
                 else {
-                    
-                    Derivacao(simbolo, token, derivado);
+                    Derivacao(x.pop(),derivado);
                 }
 
             }
@@ -87,18 +84,18 @@ public class Sintatico {
 //        }
 //       
 //    }
-    public void Derivacao(Integer simbolo, Token token, String derivado) throws ErroSintatico {
+    public void Derivacao(Integer simbolo,String derivado) throws ErroSintatico {
 
         String[] producao = derivado.split("\\|");
 
         for (int i = producao.length - 1; i >= 0; i--) {
-            if (mapaNaoTerminais.existeSimbolo(producao[i])) { //x.pop();//apaga isso
+            if (mapaNaoTerminais.existeSimbolo(producao[i])) { 
                 x.push(mapaNaoTerminais.getCodigo(producao[i]));
 
-            } else if (mapatokens.existeToken(producao[i])) { //x.pop();//apaga isso
+            } else if (mapatokens.existeToken(producao[i])) { 
                 x.push(mapatokens.getCodigo(producao[i]));
             } else {
-                throw new ErroSintatico("");
+                throw new ErroSintatico(""+a.peek().getPalavra()+a.peek().getLinha());
             }
 
         }

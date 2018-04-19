@@ -45,7 +45,7 @@ public class Lexico {
             } else if (Character.isDigit(caractere)) {
                 pilha = verificaInteiros(pilha, caractere);
             } else if (operadoresMatematicos(caractere)) {
-                tk.push(mapaTok.getToken(Character.toString(caractere)));
+                tk.push(mapaTok.getToken(Character.toString(caractere),linha));
             } //analisar atribuicao
             else if (caractere == ':') {
                 verificaAtribuicao(pilha, caractere);
@@ -99,7 +99,7 @@ public class Lexico {
                 break;
             }
         }
-        tk.add(mapaTok.getToken(palavra));
+        tk.add(mapaTok.getToken(palavra,linha));
 
         return pilha;
     }
@@ -126,7 +126,7 @@ public class Lexico {
 
             }
         }
-        tk.add(mapaTok.getToken(palavra));
+        tk.add(mapaTok.getToken(palavra,linha));
 
         return pilha;
     }
@@ -135,24 +135,24 @@ public class Lexico {
         String palavra = caractere.toString();
 
         if (pilha.empty()) {
-            tk.add(mapaTok.getToken(palavra));
+            tk.add(mapaTok.getToken(palavra,linha));
             return;
         }
         caractere = pilha.pop();
         if (caractere == '=') {
             palavra += caractere;
-            tk.add(mapaTok.getToken(palavra));
+            tk.add(mapaTok.getToken(palavra,linha));
             return;
         }
         pilha.push(caractere);
-        tk.add(mapaTok.getToken(palavra));
+        tk.add(mapaTok.getToken(palavra,linha));
     }
 
     public void verificaRelacionais(Stack<Character> pilha, Character caractere) {
         String palavra = caractere.toString();
 
         if (pilha.empty()) {
-            tk.add(mapaTok.getToken(palavra));
+            tk.add(mapaTok.getToken(palavra,linha));
             return;
         }
         if (caractere == '>') {
@@ -161,12 +161,12 @@ public class Lexico {
 
             if (caractere == '=') {
                 palavra += caractere.toString();
-                tk.add(mapaTok.getToken(palavra));
+                tk.add(mapaTok.getToken(palavra,linha));
                 // palavra = "";
 
             } else {
                 pilha.push(caractere);
-                tk.add(mapaTok.getToken(palavra));
+                tk.add(mapaTok.getToken(palavra,linha));
 
             }
 
@@ -179,11 +179,11 @@ public class Lexico {
                 switch (caractere) {
                     case '>':
                         palavra += caractere.toString();
-                        tk.add(mapaTok.getToken(palavra));
+                        tk.add(mapaTok.getToken(palavra,linha));
                         break;
                     case '=':
                         palavra += caractere.toString();
-                        tk.add(mapaTok.getToken(palavra));
+                        tk.add(mapaTok.getToken(palavra,linha));
                         break;
                     default:
                         pilha.push(caractere);
@@ -193,7 +193,7 @@ public class Lexico {
 
         } else if (caractere == '=') {
 
-            tk.add(mapaTok.getToken(palavra));
+            tk.add(mapaTok.getToken(palavra,linha));
         }
     }
 
@@ -235,7 +235,7 @@ public class Lexico {
 
                 }
 
-                tk.add(new Token(mapaTok.getCodigo("Literal"), palavra));
+                tk.add(new Token(mapaTok.getCodigo("Literal"), palavra,linha));
                 return;
             } else {
                 palavra += caractere.toString();
@@ -253,7 +253,7 @@ public class Lexico {
 
         if (caractere == '.' || caractere == '(') {
             if (pilha.empty()) {
-                tk.add(mapaTok.getToken(palavra));
+                tk.add(mapaTok.getToken(palavra,linha));
                 return;
             }
             if (caractere == '.') {
@@ -262,11 +262,11 @@ public class Lexico {
 
                 if (caractere == '.') {
                     palavra += caractere.toString();
-                    tk.add(mapaTok.getToken(palavra));
+                    tk.add(mapaTok.getToken(palavra,linha));
 
                 } else {
                     pilha.push(caractere);
-                    tk.add(mapaTok.getToken(palavra));
+                    tk.add(mapaTok.getToken(palavra,linha));
 
                 }
 
@@ -279,17 +279,17 @@ public class Lexico {
                         verificaComentario(pilha, caractere);
                     } else {
                         pilha.push(caractere);
-                        tk.add(mapaTok.getToken(palavra));
+                        tk.add(mapaTok.getToken(palavra,linha));
                         return;
 
                     }
                 } else {
-                    tk.add(mapaTok.getToken(palavra));
+                    tk.add(mapaTok.getToken(palavra,linha));
                     return;
                 }
             }
         } else {
-            tk.add(mapaTok.getToken(palavra));
+            tk.add(mapaTok.getToken(palavra,linha));
             return;
         }
 
