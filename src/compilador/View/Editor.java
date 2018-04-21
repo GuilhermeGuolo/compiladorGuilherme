@@ -33,23 +33,19 @@ public class Editor extends javax.swing.JFrame {
     }
 
     public void addTabela(Stack<Token> pilha) {
+        System.out.println("Tamanho nova pilha: "+ pilha.size());
         limpaTabela();
         for (int i = 0; i < pilha.size(); i++) {
             modelotabela.addRow(pilha.elementAt(i));
-
-        }
-
-    }
+        }    }
 
     public void limpaTabela() {
         int tam = modelotabela.getRowCount();
-        for (int i = 0; i <tam; i++) {
-            modelotabela.removeRow(i);
+        System.out.println("Tamanho velha pilha: "+tam);
+        for (int i = 0; i < tam; i++) {
+            modelotabela.removeRow(0);
         }
-        
     }
-
-  
 
     ActionListener listener = new ControleEditor(this);
 
@@ -84,7 +80,7 @@ public class Editor extends javax.swing.JFrame {
         area_editor.setColumns(20);
         area_editor.setLineWrap(true);
         area_editor.setRows(5);
-        area_editor.setText("Program testeproc1; \nVar \n    X, y, z :Integer; \nProcedure P; \nBegin\n\n\nEnd.");
+        area_editor.setText("Program testeproc1; \nVar \n    X, y, z :Integer; \nProcedure P; \nVar \n    A  :Integer; \nBegin \n    Readln(a); \n    If a=x Then  \n        z:=z+x \n    Else Begin \n        Z:=z-x;   \n        Call p; \n    End; \nEnd; \nBegin \n    Z:=0; \n    Readln(x,y); \n    If x>y Then \n        Call p \n    Else  \n        Z:=z+x+y; \n    Writeln(z); \nEnd. ");
         jScrollPane1.setViewportView(area_editor);
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(

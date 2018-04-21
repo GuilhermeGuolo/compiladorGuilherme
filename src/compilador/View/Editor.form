@@ -135,7 +135,7 @@
                 <Property name="columns" type="int" value="20"/>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
-                <Property name="text" type="java.lang.String" value="Program testeproc1; &#xa;Var &#xa;    X, y, z :Integer; &#xa;Procedure P; &#xa;Begin&#xa;&#xa;&#xa;End."/>
+                <Property name="text" type="java.lang.String" value="Program testeproc1; &#xa;Var &#xa;    X, y, z :Integer; &#xa;Procedure P; &#xa;Var &#xa;    A  :Integer; &#xa;Begin &#xa;    Readln(a); &#xa;    If a=x Then  &#xa;        z:=z+x &#xa;    Else Begin &#xa;        Z:=z-x;   &#xa;        Call p; &#xa;    End; &#xa;End; &#xa;Begin &#xa;    Z:=0; &#xa;    Readln(x,y); &#xa;    If x&gt;y Then &#xa;        Call p &#xa;    Else  &#xa;        Z:=z+x+y; &#xa;    Writeln(z); &#xa;End. "/>
               </Properties>
             </Component>
           </SubComponents>
